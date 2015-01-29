@@ -18,7 +18,10 @@ my $cmd_defs = {
     opts => {
 	"--save" => {
 	    type => "bool",
-	    alias => "-s" }
+	    alias => "-s" },
+	"--verbose" => {
+	    type => "bool",
+	    alias => "-v" }
     },
     cmds => {
 	help => {},
@@ -109,9 +112,11 @@ sub get_sw
 	if ( $@ ) {
 	    errexit("Error during sw::$sname object creation: ".$@, 1);
 	}
+	$name = $sname;
     }
 
-    return $sw;
+    return { sw => $sw,
+	     name => $name };
 }
 
 sub output_help
@@ -122,8 +127,9 @@ sub output_help
     $pname =~ s/^.*\/([^\/]+)$/$1/o;
     print("Usage: $pname [OPTIONS] COMMAND IP\n\n".
 	  "OPTIONS:\n".
-	  " -s, --save  output in a format that can be executed later to \n".
-	  "             restore settings\n\n".
+	  " -s, --save     output in a format that can be executed later \n".
+	  "                to restore settings\n".
+	  " -v, --verbose  be more verbose\n\n".
 	  "COMMAND:\n".
 	  " help     show this help\n".
 	  " version  show a version of $pname\n".
@@ -162,7 +168,12 @@ sub do_ip_bind_show
 	exit(1);
     }
 
-    $sw = get_sw($ipaddr);
+    $ret = get_sw($ipaddr);
+    $sw = $ret->{sw};
+    if ( $opts->{"--verbose"} ) {
+	print("Device sysDescr.0: ".$ret->{name}."\n");
+    }
+
     $ret = $sw->ip_bind_get($args->{addr}, $args->{port});
     if ( $sw->{err}{err_code} ne "ok" ) {
 	errexit(sprintf(shift(@{$sw->{err}{err_msg}}),
@@ -194,7 +205,8 @@ sub do_ip_bind_set
 	exit(1);
     }
 
-    $sw = get_sw($ipaddr);
+    $ret = get_sw($ipaddr);
+    $sw = $ret->{sw};
     $ret = $sw->ip_bind_set($args->{addr}, $args->{port});
     if ( $sw->{err}{err_code} ne "ok" ) {
 	errexit(sprintf(shift(@{$sw->{err}{err_msg}}),
@@ -216,7 +228,8 @@ sub do_ip_bind_rm
 	exit(1);
     }
 
-    $sw = get_sw($ipaddr);
+    $ret = get_sw($ipaddr);
+    $sw = $ret->{sw};
     $ret = $sw->ip_bind_rm($args->{addr}, $args->{port});
     if ( $sw->{err}{err_code} ne "ok" ) {
 	errexit(sprintf(shift(@{$sw->{err}{err_msg}}),
