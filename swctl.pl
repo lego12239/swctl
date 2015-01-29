@@ -9,7 +9,7 @@ use Data::Dumper;
 use constant {
     SNMP_COMMUNITY => "private",
     SNMP_VERSION => "2",
-    VERSION => "0.1.0"
+    VERSION => "0.2.0"
 };
 
 
