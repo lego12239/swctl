@@ -1,0 +1,56 @@
+swctl
+==========
+
+swctl is the command line utility written in Perl for controlling snmp devices.
+The main purpose is to provide a common interface to various network devices.
+
+
+Install
+==========
+
+For example we use /opt/swctl directory for swctl.
+After we copy swctl files to it, we must change the first line of swctl.pl to
+the next:
+
+#!/usr/bin/perl -W -I/opt/swctl
+
+
+Usage
+==========
+
+Try ./swctl.pl help to see options and commands.
+
+swctl.pl support commands shortening like a iproute2. E.g., instead of:
+
+./swctl.pl ip bind show 10.0.0.1
+
+we can write:
+
+./swctl.pl ip b sh 10.0.0.1
+
+to see ip-port bindings on 10.0.0.1 switch.
+
+
+Supported devices and actions
+=============================
+
+dlink des-3200-28:
+- ip-port binding (ACL);
+
+dlink des-3526:
+- ip-port binding (ACL);
+
+dlink dgs-1100-06/ME:
+- ip-port binding (ACL);
+
+
+Device Specifics
+================
+
+dlink:
+======
+
+dlink ip-port binding based on ACL. By default, swctl use profile id 3 to
+work with ip-port bindings. To change this settings you must consult
+dlink.pm(for light help) and needed pm for a specific switch model(e.g.
+DES_3526.pm).
