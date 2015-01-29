@@ -1,4 +1,23 @@
 #!/usr/bin/perl -W -I. -I/opt/swctl
+#
+# command line utility for controlling snmp devices
+#
+# Copyright (C) 2014  Oleg Nemanov <lego12239@yandex.ru>, Cifrabar group
+# Copyright (C) 2015  Oleg Nemanov <lego12239@yandex.ru>, Cifrabar group
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 
 use strict;
 use parse_cmd;
@@ -151,7 +170,13 @@ sub output_version
 
 
     $pname =~ s/^.*\/([^\/]+)$/$1/o;
-    print("$pname ".VERSION."\n");
+    print("$pname ".VERSION."\n".
+	  "Copyright (C) 2014  Oleg Nemanov, Cifrabar group\n\n".
+	  "This program comes with ABSOLUTELY NO WARRANTY; for details see ".
+	  "LICENSE.\n".
+	  "This is free software, and you are welcome to redistribute it\n".
+	  "and/or modify it under the terms of the GNU GPL 3 or later; ".
+	  "for details see LICENSE.\n");
 }
 
 sub do_ip_bind_show
