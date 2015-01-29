@@ -8,7 +8,8 @@ use Data::Dumper;
 
 use constant {
     SNMP_COMMUNITY => "private",
-    SNMP_VERSION => "2"
+    SNMP_VERSION => "2",
+    VERSION => "0.1.0"
 };
 
 
@@ -22,6 +23,7 @@ my $cmd_defs = {
     cmds => {
 	help => {},
 	"ip/help" => {},
+	version => {},
 	"ip/bind/set" => {
 	    args => {
 		addr => { type => "str",
@@ -48,6 +50,7 @@ my $cmd_defs = {
 my $pcmd;
 my $acts = { help => \&output_help,
 	     "ip/help" => \&output_ip_help,
+	     version => \&output_version,
 	     "ip/bind/show" => \&do_ip_bind_show,
 	     "ip/bind/set" => \&do_ip_bind_set,
 	     "ip/bind/rm" => \&do_ip_bind_rm };
@@ -122,8 +125,9 @@ sub output_help
 	  " -s, --save  output in a format that can be executed later to \n".
 	  "             restore settings\n\n".
 	  "COMMAND:\n".
-	  " help  show this help\n".
-	  " ip    ip related actions ('ip help' to see help)\n");
+	  " help     show this help\n".
+	  " version  show a version of $pname\n".
+	  " ip       ip related actions ('ip help' to see help)\n");
 }
 
 sub output_ip_help
@@ -133,6 +137,15 @@ sub output_ip_help
 	  "  ip bind rm {addr IPADDR | port PORT}\n".
 	  "  ip bind rm addr IPADDR port PORT\n".
 	  "  ip bind show [addr IPADDR | port PORT]\n");
+}
+
+sub output_version
+{
+    my $pname = $0;
+
+
+    $pname =~ s/^.*\/([^\/]+)$/$1/o;
+    print("$pname ".VERSION."\n");
 }
 
 sub do_ip_bind_show
